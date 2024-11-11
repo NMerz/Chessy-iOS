@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		853099FF2C9D1868008CDB93 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853099FE2C9D185A008CDB93 /* EditView.swift */; };
 		853E25782C9621C2008F65BC /* ChessyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E25772C9621C2008F65BC /* ChessyApp.swift */; };
 		853E257A2C9621C2008F65BC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E25792C9621C2008F65BC /* ContentView.swift */; };
 		853E257C2C9621C3008F65BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 853E257B2C9621C3008F65BC /* Assets.xcassets */; };
@@ -14,6 +15,9 @@
 		853E25892C9621C3008F65BC /* ChessyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E25882C9621C3008F65BC /* ChessyTests.swift */; };
 		853E25932C9621C3008F65BC /* ChessyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E25922C9621C3008F65BC /* ChessyUITests.swift */; };
 		853E25952C9621C3008F65BC /* ChessyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E25942C9621C3008F65BC /* ChessyUITestsLaunchTests.swift */; };
+		853E25A22C96250A008F65BC /* CameraActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E25A12C96250A008F65BC /* CameraActor.swift */; };
+		853E25A42C9651AD008F65BC /* Poster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E25A32C9651AD008F65BC /* Poster.swift */; };
+		853E25A62C97592E008F65BC /* PgnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853E25A52C97592E008F65BC /* PgnView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		853099FE2C9D185A008CDB93 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
 		853E25742C9621C2008F65BC /* Chessy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chessy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		853E25772C9621C2008F65BC /* ChessyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessyApp.swift; sourceTree = "<group>"; };
 		853E25792C9621C2008F65BC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +49,9 @@
 		853E258E2C9621C3008F65BC /* ChessyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChessyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		853E25922C9621C3008F65BC /* ChessyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessyUITests.swift; sourceTree = "<group>"; };
 		853E25942C9621C3008F65BC /* ChessyUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessyUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		853E25A12C96250A008F65BC /* CameraActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraActor.swift; sourceTree = "<group>"; };
+		853E25A32C9651AD008F65BC /* Poster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poster.swift; sourceTree = "<group>"; };
+		853E25A52C97592E008F65BC /* PgnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PgnView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,10 +102,14 @@
 		853E25762C9621C2008F65BC /* Chessy */ = {
 			isa = PBXGroup;
 			children = (
+				853099FE2C9D185A008CDB93 /* EditView.swift */,
 				853E25772C9621C2008F65BC /* ChessyApp.swift */,
 				853E25792C9621C2008F65BC /* ContentView.swift */,
 				853E257B2C9621C3008F65BC /* Assets.xcassets */,
 				853E257D2C9621C3008F65BC /* Preview Content */,
+				853E25A12C96250A008F65BC /* CameraActor.swift */,
+				853E25A32C9651AD008F65BC /* Poster.swift */,
+				853E25A52C97592E008F65BC /* PgnView.swift */,
 			);
 			path = Chessy;
 			sourceTree = "<group>";
@@ -257,8 +269,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				853E25A62C97592E008F65BC /* PgnView.swift in Sources */,
+				853E25A42C9651AD008F65BC /* Poster.swift in Sources */,
+				853099FF2C9D1868008CDB93 /* EditView.swift in Sources */,
 				853E257A2C9621C2008F65BC /* ContentView.swift in Sources */,
 				853E25782C9621C2008F65BC /* ChessyApp.swift in Sources */,
+				853E25A22C96250A008F65BC /* CameraActor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,6 +441,7 @@
 				DEVELOPMENT_TEAM = LNF77PC4UL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is used to take pictures of the game to digitize.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -454,6 +471,7 @@
 				DEVELOPMENT_TEAM = LNF77PC4UL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is used to take pictures of the game to digitize.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
