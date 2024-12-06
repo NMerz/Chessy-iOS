@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 
+
+
 struct EditView: View, Hashable {
     static func == (lhs: EditView, rhs: EditView) -> Bool {
         return lhs.movePredictions == rhs.movePredictions
@@ -26,7 +28,11 @@ struct EditView: View, Hashable {
     @State var imageUrl: URL
     @State var showErrorMessage = false
     
-    
+        
+    @State private var result = String("Result: ")
+  
+     @FocusState  var focusedField: Int?
+ 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -65,6 +71,7 @@ struct EditView: View, Hashable {
                             Text("#")
                             Text("White").frame(maxWidth: .infinity, alignment: .leading).multilineTextAlignment(.leading)
                             Text("Black").frame(maxWidth: .infinity, alignment: .leading)
+                            /// combinedResults.forEach { result in }
                             ForEach(0 ..< Int(truncatingIfNeeded: (combinedResults.count + 1) / 2), id: \.self) { turnNumber in
                                 //                    if result % 2 == 0 {
                                 Text((turnNumber + 1).description)
@@ -72,6 +79,7 @@ struct EditView: View, Hashable {
                                 
                                 ForEach(0 ..< 2) { offset in
                                     let currentMove = turnNumber * 2 + offset
+
                                     VStack {
                                         if (currentMove < combinedResults.count) {
                                             if movePredictions.cell_bounds.count > currentMove {
@@ -88,8 +96,8 @@ struct EditView: View, Hashable {
                                                 let yMin = movePredictions.cell_bounds[currentMove].map({vertex in  vertex.y}).reduce(Int(ciImage.extent.height)) { partialResult, currentMin in
                                                     return min(partialResult, currentMin)
                                                 }
-                                                let width = max(xMax - xMin, 1)
-                                                let height = max(yMax - yMin, 1)
+                                                let width = 200 //JWM  max(xMax - xMin, 1)
+                                                let height = 100 //JWM  max(yMax - yMin, 1)
                                                 //                                    let cropped = CIImage(contentsOf: imageUrl)!.cropped(to: CGRect(x: xMin, y: yMin, width: xMax - xMin, height: yMax - yMin))
                                                 Image(uiImage: UIImage(cgImage: (UIImage(contentsOfFile: imageUrl.path())?.cgImage!.cropping(to: CGRect(x: xMin, y: max(yMin - Int(Double(height) * 0.1), 0), width: width, height: Int(Double(height) * 1.3)))!)!)).resizable().frame(width: geometry.size.width / 3, height: CGFloat(geometry.size.width / 3.0) * CGFloat(height) / CGFloat(width)).onAppear {
                                                     print(ciImage.extent.width, ciImage.extent.height)
@@ -101,9 +109,24 @@ struct EditView: View, Hashable {
                                             }
                                         }
                                         if (currentMove < combinedResults.count) {
-                                            TextField("", text: $combinedResults[currentMove]).background(combinedResults[currentMove] == "" ? Color.red : Color.clear).onChange(of: combinedResults[currentMove], {
+                                            TextField("", text: $combinedResults[currentMove])
+                                                .background(combinedResults[currentMove] == "" ? Color.red : Color.clear)
+                                                //.onChange(of: isFocused) { isFocused in
+                                                         // this will get called after the delay
+                                                     //  }
+                                                       .onAppear {
+                                                         // key part: delay setting isFocused until after some-internal-iOS setup
+                                                         DispatchQueue.main.asyncAfter(deadline: .now()+0.7) {
+                                                              focusedField = combinedResults.count - 1
+                                                         }
+                                                       }
+                                            
+                                            
+                                                .onChange(of: combinedResults[currentMove], {
                                                 if combinedResults[currentMove].contains( try! Regex("^([QRBKN])?([a-h]?)(x?)([a-h])([0-9])(\\+?)#?$")) {
                                                     showErrorMessage = false
+                                                    print("JWM - we have a move that looks like a move, but is it valid?")
+                                                    
                                                     Task {
                                                         let oldCount = combinedResults.count
                                                         movePredictions.past_moves = combinedResults
@@ -135,7 +158,11 @@ struct EditView: View, Hashable {
                                                         }
                                                     }
                                                 }
-                                            }).font(.system(size: 24)).autocorrectionDisabled()
+                                            })
+                                             
+                                                .font(.system(size: 24)).autocorrectionDisabled()
+                                                .focused($focusedField, equals: currentMove)
+
                                         }
                                     }
                                 }
@@ -144,7 +171,101 @@ struct EditView: View, Hashable {
                                 Color.primary.frame(height: 2.0)
                             }
                         }
-                    }
+                    }.defaultScrollAnchor(.bottom)
+                    
+
+                        VStack {
+                            
+                            let column1Names = "PNBRQK\u{232B}".map{ String($0) }
+                            let column2Names = "abcdefgh".map{ String($0) }
+                            let column3Names = "12345678".map{ String($0) }
+                            let column4Names = ["x", "+", "#", "O-O", "O-O-O"]
+
+                            let allColumns = [ column1Names , column2Names , column3Names , column4Names]
+                            ForEach(allColumns, id: \.self) { currentColumn in
+                                HStack {
+                                    
+                                    ForEach( currentColumn, id: \.self) { buttonName in
+                                        
+                                        HStack {
+                                            @State var myColor = Color.white
+                                            // let buttonName = "T"
+                                            let length = buttonName.count
+                                            let buttonWidthBase =  (length > 1 ) ? CGFloat(length * 22) : CGFloat(25)
+                                            let buttonWidth = (buttonName == "\u{232B}") ? CGFloat(70) : buttonWidthBase
+                                           // $focusedField = combinedResults.count
+                                            Button(action: {
+                                                //  colSelected = buttonName
+                                                
+                                                //  withAnimation (.linear(duration: 0.1)){
+                                                //       myColor = Color.gray
+                                                //   }
+                                                withAnimation (.linear(duration: 1.3)){
+                                                    myColor = Color.white
+                                                }
+                                                if let newIndex = focusedField {
+                                            
+                                                    if (combinedResults.count > 0) {
+                                                        
+                                                        if (buttonName == "\u{232B}") {
+                                                            if (combinedResults[newIndex].count > 0 ){
+                                                                combinedResults[newIndex] = String( combinedResults[newIndex].dropLast() )
+                                                            }
+                                                        } else {
+                                                            combinedResults[newIndex] += buttonName
+                                                        }
+                                                    }
+                                                }
+                                                
+                                            }) {
+                                                
+                                                Text(buttonName)
+                                                    .foregroundStyle(.black )
+                                                    .font(.system(size: 21)).fixedSize()  //30
+                                                //.onTapGesture {
+                                                
+                                                // }
+                                            }
+                                            .frame(width: buttonWidth, height: 15, alignment: .center)
+                                            .padding(.top, 10)
+                                            .padding(.bottom, 10)
+                                            .padding(.leading, 10)
+                                            .padding(.trailing, 0)
+                                            .buttonStyle(.borderedProminent)
+                                            .tint(myColor)
+                                            .animation(.default, value: true)
+                                            // .animation(.default, value: colSelected == buttonName)
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        // .containerRelativeFrame([.horizontal, .vertical])
+                        .frame(maxWidth: .infinity, maxHeight: 210)
+                        .background(Color.gray  .ignoresSafeArea())
+               ////     }////  zstsck
+
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    //  ButtonCellView(buttonName: buttonName, colSelected: $col1Selected, result: $result )
+                    //  $combinedResults[currentMove]
+ //                   Text("JWM button here")
+                         
+
+                        
+                        
+                        
+                        
+                        
+                   /// }////
+                   
                 }
                 if showErrorMessage {
                     VStack {
@@ -164,3 +285,79 @@ struct EditView: View, Hashable {
     
     
 }
+
+// ButtonCellView(buttonName: "T",  result: $combinedResults, focused: focusedField  )
+/*
+struct ButtonCellView: View {
+
+    let buttonName: String
+    // @Binding var colSelected: Optional<String>
+   //  let fieldNumber: Int
+    @Binding var result: [String]
+  //  @Binding var focusedField: Int?
+     @Binding var focused: Int?
+   @State var myColor = Color.white
+
+    var body: some View {
+ 
+        HStack {
+
+            let length = buttonName.count
+            let buttonWidthBase =  (length > 1 ) ? CGFloat(length * 22) : CGFloat(25)
+            let buttonWidth = (buttonName == "\u{232B}") ? CGFloat(70) : buttonWidthBase
+            Button(action: {
+                
+               // print (focusedField)
+               //  colSelected = buttonName
+                
+              //  withAnimation (.linear(duration: 0.1)){
+             //       myColor = Color.gray
+             //   }
+                withAnimation (.linear(duration: 1.3)){
+                    myColor = Color.white
+                }
+                if let newIndex = focused {
+                    // list.items[newIndex].name += "XVX"
+            
+                    if (buttonName == "\u{232B}") {
+                        if (result[newIndex].count > 0 ){
+                            result[newIndex] = String( result[newIndex].dropLast() )
+                        }
+                    } else {
+                        result[newIndex] += buttonName
+                    }
+                }
+                /*
+                if (buttonName == "\u{232B}") {
+                    if (result.count > 0 ){
+                        result = String( result.dropLast() )
+                    }
+                } else {
+                    result += buttonName
+                }
+                 */
+                
+            }) {
+                
+                Text(buttonName)
+                    .foregroundStyle(.black )
+                    .font(.system(size: 21)).fixedSize()  //30
+                //.onTapGesture {
+                
+                // }
+            }
+            .frame(width: buttonWidth, height: 15, alignment: .center)
+            .padding(.top, 10)
+            .padding(.bottom, 10)
+            .padding(.leading, 10)
+            .padding(.trailing, 0)
+            .buttonStyle(.borderedProminent)
+            .tint(myColor)
+            .animation(.default, value: true)
+            // .animation(.default, value: colSelected == buttonName)
+            
+        }
+
+    }
+}
+*/
