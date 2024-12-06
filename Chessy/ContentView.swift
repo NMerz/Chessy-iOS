@@ -86,6 +86,7 @@ struct MovePredictions: Codable, Equatable, Hashable {
     let google: [[MoveParts?]]
     let openai: [[MoveParts?]]
     let amazon: [[MoveParts?]]
+    let custom: [[MoveParts?]]
     let cell_bounds: [[Vertex]]
 }
 
@@ -107,10 +108,6 @@ struct ContentView: View {
                     Text("The AI is processing the image.")
                     ProgressView()
                 } else {
-                    Image(systemName: "globe")
-                        .imageScale(.large)
-                        .foregroundStyle(.tint)
-                    Text("Hello, world!")
                     VideoPreview(previewSource: cameraActor.previewSource).ignoresSafeArea(.all)
                     Button("capture") {
                         Task {
@@ -150,7 +147,7 @@ struct ContentView: View {
                             }
                             do {
                                 let predictions = try await Poster.postFor(MovePredictions.self, request: URLRequest(url: URL (string: "https://ocr-chess-game-965053369291.us-central1.run.app")!), postString: newValue)
-//                                let predictions = MovePredictions(google: [[MoveParts(piece: nil, source: nil, capture: false, rank: "e", file: "4", check: false, ks_castle: false, qs_castle: false), MoveParts(piece: nil, source: nil, capture: false, rank: "e", file: "5", check: false, ks_castle: false, qs_castle: false)]], openai: [[nil, nil]], amazon: [[]], cell_bounds: [[Vertex(x: 57, y: 166), Vertex(x: 121, y: 198)], [Vertex(x: 121, y: 166), Vertex(x: 265, y: 198)]])
+//                                let predictions = MovePredictions(google: [[MoveParts(piece: nil, source: nil, capture: false, rank: "e", file: "4", check: false, ks_castle: false, qs_castle: false), MoveParts(piece: nil, source: nil, capture: false, rank: "e", file: "5", check: false, ks_castle: false, qs_castle: false)]], openai: [[nil, nil]], amazon: [[]], custom: [[]], cell_bounds: [[Vertex(x: 57, y: 166), Vertex(x: 121, y: 198)], [Vertex(x: 121, y: 166), Vertex(x: 265, y: 198)]])
 //                                try await Task.sleep(for: .seconds(5))
                                 
                                 
@@ -181,7 +178,7 @@ struct ContentView: View {
         }
 //        .onAppear {
 //            //Testing bypass
-//            navPath.append(EditView(movePredictions: MovePredictions(google: [[MoveParts(piece: nil, source: nil, capture: false, rank: "e", file: "4", check: false, ks_castle: false, qs_castle: false), MoveParts(piece: nil, source: nil, capture: false, rank: "e", file: "5", check: false, ks_castle: false, qs_castle: false)]], openai: [[nil, nil]], amazon: [[]]), navPath: $navPath))
+//            navPath.append(EditView(movePredictions: MovePredictions(google: [[MoveParts(piece: nil, source: nil, capture: false, rank: "e", file: "4", check: false, ks_castle: false, qs_castle: false), MoveParts(piece: nil, source: nil, capture: false, rank: "e", file: "5", check: false, ks_castle: false, qs_castle: false)]], openai: [[nil, nil]], amazon: [[]], custom: [[]]), navPath: $navPath))
 //        }
     }
 }
